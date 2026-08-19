@@ -614,21 +614,21 @@
       <div class="tab-card" id="tab-btn-load">
         <div class="tab-card-header">
           <span class="tab-num">01</span>
-          <span class="tab-icon">âž”</span>
+          <span class="tab-icon">➔</span>
         </div>
         <span class="tab-label">Load</span>
       </div>
       <div class="tab-card" id="tab-btn-slots">
         <div class="tab-card-header">
           <span class="tab-num">02</span>
-          <span class="tab-icon">ðŸ“</span>
+          <span class="tab-icon">📁</span>
         </div>
         <span class="tab-label">Saved Slots</span>
       </div>
       <div class="tab-card" id="tab-btn-cutting">
         <div class="tab-card-header">
           <span class="tab-num">03</span>
-          <span class="tab-icon">âœ‚ï¸</span>
+          <span class="tab-icon">✂️</span>
         </div>
         <span class="tab-label">Cutting</span>
       </div>
@@ -665,7 +665,7 @@
     <!-- Selected Numbers Display Card -->
     <div class="selected-numbers-container">
       <div class="selected-numbers-display" id="selected-numbers-display">
-        Bases: â€”
+        Bases: —
       </div>
     </div>
 
@@ -699,7 +699,7 @@
     <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 10px; margin-top: 10px; margin-bottom: 10px;">
       <input type="number" id="table-provided-total" placeholder="Provided Total">
       <div class="file-input-wrapper">
-        <button class="btn" style="width: 100%; font-size: 12px;">ðŸ“· Image OCR</button>
+        <button class="btn" style="width: 100%; font-size: 12px;">📷 Image OCR</button>
         <input type="file" id="file-input" accept="image/*">
       </div>
     </div>
@@ -712,7 +712,7 @@
     <div class="verification-badge-panel">
       <div style="display: flex; flex-direction: column; gap: 4px;">
         <span style="font-size: 11px; font-weight: 700; color: var(--text-secondary);">Table Status:</span>
-        <div id="table-status-badge" class="status-badge empty"><span>â—</span> Empty</div>
+        <div id="table-status-badge" class="status-badge empty"><span>●</span> Empty</div>
       </div>
       <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
         <span style="font-size: 11px; font-weight: 700; color: var(--text-secondary);">Calculated Total:</span>
@@ -800,21 +800,21 @@
       <div>
         <div style="font-size: 11px; font-weight: 700; color: var(--error); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">Mota Numbers (400+)</div>
         <div style="background-color: #1a0e10; border: 1px solid rgba(244, 63, 94, 0.2); border-radius: var(--radius-md); padding: 12px; height: 260px; overflow-y: auto;">
-          <pre id="result-output-left" style="font-family: var(--font-mono); font-size: 13px; color: #fcccd4; white-space: pre-wrap; margin: 0;">â€”</pre>
+          <pre id="result-output-left" style="font-family: var(--font-mono); font-size: 13px; color: #fcccd4; white-space: pre-wrap; margin: 0;">—</pre>
         </div>
-        <button id="btn-copy-left" class="btn" style="width: 100%; margin-top: 8px; font-size: 11px; padding: 10px; background-color: var(--error-bg); border-color: rgba(244, 63, 94, 0.3); color: var(--error);">ðŸ“‹ Copy 400+</button>
+        <button id="btn-copy-left" class="btn" style="width: 100%; margin-top: 8px; font-size: 11px; padding: 10px; background-color: var(--error-bg); border-color: rgba(244, 63, 94, 0.3); color: var(--error);">📋 Copy 400+</button>
       </div>
       <div>
         <div style="font-size: 11px; font-weight: 700; color: var(--success); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">Bache Numbers (&lt;400)</div>
         <div style="background-color: #061911; border: 1px solid rgba(16, 185, 129, 0.2); border-radius: var(--radius-md); padding: 12px; height: 260px; overflow-y: auto;">
-          <pre id="result-output-right" style="font-family: var(--font-mono); font-size: 13px; color: #e8f8ed; white-space: pre-wrap; margin: 0;">â€”</pre>
+          <pre id="result-output-right" style="font-family: var(--font-mono); font-size: 13px; color: #e8f8ed; white-space: pre-wrap; margin: 0;">—</pre>
         </div>
-        <button id="btn-copy-right" class="btn" style="width: 100%; margin-top: 8px; font-size: 11px; padding: 10px; background-color: var(--success-bg); border-color: rgba(16, 185, 129, 0.3); color: var(--success);">ðŸ“‹ Copy Remaining</button>
+        <button id="btn-copy-right" class="btn" style="width: 100%; margin-top: 8px; font-size: 11px; padding: 10px; background-color: var(--success-bg); border-color: rgba(16, 185, 129, 0.3); color: var(--success);">📋 Copy Remaining</button>
       </div>
     </div>
 
     <button id="btn-copy-result" class="btn primary" style="width: 100%; padding: 14px; gap: 8px; font-size: 16px;">
-      ðŸ“‹ Copy Combined Results
+      📋 Copy Combined Results
     </button>
   </div>
 
@@ -919,7 +919,7 @@
         updateGridValues();
         updateGridCuttingUI();
         updateVerificationDisplays();
-        resultOutput.textContent = "Saved slots à¤¯à¤¾ grid à¤ªà¤° number à¤¸à¥‡à¤²à¥‡à¤•à¥à¤Ÿ à¤•à¤° \"Confirm Cutting\" à¤¦à¤¬à¤¾à¤à¤à¥¤";
+        resultOutput.textContent = "Saved slots या grid पर number सेलेक्ट कर \"Confirm Cutting\" दबाएँ।";
         showLogConsole("", false);
       });
 
@@ -989,7 +989,7 @@
     function parseAmount(val) {
       if (val === null || val === undefined) return null;
       const clean = String(val).trim()
-        .replace(/â‚¹/g, '')
+        .replace(/₹/g, '')
         .replace(/\bRs\.?\s*/gi, '')
         .replace(/,/g, '')
         .trim();
@@ -1170,7 +1170,7 @@
 
       const filtered = bases.filter(Boolean);
       if (filtered.length === 0) {
-        selectedNumbersDisplay.innerHTML = "Bases: â€”";
+        selectedNumbersDisplay.innerHTML = "Bases: —";
       } else {
         selectedNumbersDisplay.innerHTML = "Bases: " + filtered.join(", ");
       }
@@ -1258,7 +1258,7 @@
       
       if (Object.keys(currentTable).length === 0) {
         tableStatusBadge.className = "status-badge empty";
-        tableStatusBadge.innerHTML = "<span>â—</span> Empty";
+        tableStatusBadge.innerHTML = "<span>●</span> Empty";
         if (drawerCalcEl) drawerCalcEl.textContent = "0";
         if (statTotal) statTotal.textContent = "0";
         return;
@@ -1268,20 +1268,20 @@
         const providedTotal = parseFloat(providedText);
         if (Math.abs(calculatedTotal - providedTotal) < 0.01) {
           tableStatusBadge.className = "status-badge verified";
-          tableStatusBadge.innerHTML = "<span>â—</span> VERIFIED";
+          tableStatusBadge.innerHTML = "<span>●</span> VERIFIED";
         } else {
           tableStatusBadge.className = "status-badge mismatch";
-          tableStatusBadge.innerHTML = "<span>â—</span> MISMATCH";
+          tableStatusBadge.innerHTML = "<span>●</span> MISMATCH";
         }
       } else {
         tableStatusBadge.className = "status-badge empty";
-        tableStatusBadge.innerHTML = "<span>â—</span> NOT COMPARED";
+        tableStatusBadge.innerHTML = "<span>●</span> NOT COMPARED";
       }
 
       if (parsedResult) {
         let msg = `Loaded ${parsedResult.count} entries. `;
         if (parsedResult.duplicates.length > 0) {
-          msg += `âš ï¸ Duplicates: ${parsedResult.duplicates.join(", ")}. `;
+          msg += `⚠️ Duplicates: ${parsedResult.duplicates.join(", ")}. `;
         }
         if (parsedResult.errors.length > 0) {
           msg += `Skipped: ${parsedResult.errors.length}.`;
@@ -1365,8 +1365,8 @@
       manualBases.forEach(val => baseNumbers.push(val));
 
       if (baseNumbers.length === 0) {
-        resultOutputLeft.textContent = "â€”";
-        resultOutputRight.textContent = "â€”";
+        resultOutputLeft.textContent = "—";
+        resultOutputRight.textContent = "—";
         cuttingActiveNumbers.clear();
         updateGridCuttingUI();
         statCuts.textContent = "0";
@@ -1421,7 +1421,7 @@
         leftLines.push("", `GRAND TOTAL = ${leftTotal}`);
         resultOutputLeft.textContent = leftLines.join("\n");
       } else {
-        resultOutputLeft.textContent = "â€”";
+        resultOutputLeft.textContent = "—";
       }
 
       // Format Right Box (Bache <400)
@@ -1441,7 +1441,7 @@
       if (rightLines.length > 0) {
         resultOutputRight.textContent = rightLines.join("\n");
       } else {
-        resultOutputRight.textContent = "â€”";
+        resultOutputRight.textContent = "—";
       }
     }
 
@@ -1450,10 +1450,10 @@
       const btn = document.getElementById(buttonId);
       if (!el || !btn) return;
       const text = el.textContent;
-      if (!text || text.trim() === "â€”" || text.startsWith("Saved slots")) return;
+      if (!text || text.trim() === "—" || text.startsWith("Saved slots")) return;
       navigator.clipboard.writeText(text).then(() => {
         const originalText = btn.innerHTML;
-        btn.textContent = "âœ“ Copied!";
+        btn.textContent = "✓ Copied!";
         btn.style.backgroundColor = "var(--success)";
         btn.style.color = "#ffffff";
         setTimeout(() => {
@@ -1468,8 +1468,8 @@
       const leftText = resultOutputLeft.textContent;
       const rightText = resultOutputRight.textContent;
       
-      const leftPart = (leftText.trim() === "â€”" || leftText.trim() === "") ? "" : `=== MOTA NUMBERS (400+) ===\n${leftText}`;
-      const rightPart = (rightText.trim() === "â€”" || rightText.trim() === "") ? "" : `=== BACHE NUMBERS (<400) ===\n${rightText}`;
+      const leftPart = (leftText.trim() === "—" || leftText.trim() === "") ? "" : `=== MOTA NUMBERS (400+) ===\n${leftText}`;
+      const rightPart = (rightText.trim() === "—" || rightText.trim() === "") ? "" : `=== BACHE NUMBERS (<400) ===\n${rightText}`;
       
       const combined = [leftPart, rightPart].filter(Boolean).join("\n\n");
       if (!combined) return;
@@ -1477,7 +1477,7 @@
       navigator.clipboard.writeText(combined).then(() => {
         const btn = document.getElementById("btn-copy-result");
         const originalText = btn.innerHTML;
-        btn.textContent = "âœ“ Combined Copied!";
+        btn.textContent = "✓ Combined Copied!";
         btn.style.backgroundColor = "var(--success)";
         setTimeout(() => { btn.innerHTML = originalText; btn.style.backgroundColor = ""; }, 1400);
       });
@@ -1519,7 +1519,7 @@
       }
       consoleLogMsg.style.display = "flex";
       consoleLogMsg.className = isError ? "console-log error" : "console-log";
-      consoleLogMsg.innerHTML = `<span>âš™ï¸</span> ${msg}`;
+      consoleLogMsg.innerHTML = `<span>⚙️</span> ${msg}`;
     }
 
     // Self testing
@@ -1556,4 +1556,3 @@
   </script>
 </body>
 </html>
-
