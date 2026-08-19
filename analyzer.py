@@ -1,0 +1,40 @@
+import json
+
+# Let's map the image table values (1 to 100)
+image_table = {
+    "01": 865, "02": 570, "03": 1160, "04": 1020, "05": 875, "06": 1650, "07": 845, "08": 315, "09": 925, "10": 685,
+    "11": 1515, "12": 1005, "13": 720, "14": 1025, "15": 1200, "16": 860, "17": 535, "18": 1230, "19": 670, "20": 650,
+    "21": 685, "22": 605, "23": 1010, "24": 790, "25": 725, "26": 2070, "27": 880, "28": 1195, "29": 1210, "30": 1050,
+    "31": 795, "32": 720, "33": 865, "34": 605, "35": 510, "36": 645, "37": 515, "38": 580, "39": 1235, "40": 1280,
+    "41": 900, "42": 710, "43": 495, "44": 705, "45": 1085, "46": 1005, "47": 760, "48": 1020, "49": 830, "50": 1060,
+    "51": 805, "52": 750, "53": 925, "54": 740, "55": 815, "56": 755, "57": 735, "58": 485, "59": 895, "60": 600,
+    "61": 685, "62": 1595, "63": 305, "64": 675, "65": 595, "66": 755, "67": 630, "68": 920, "69": 885, "70": 790,
+    "71": 650, "72": 1135, "73": 460, "74": 1045, "75": 760, "76": 960, "77": 1365, "78": 1070, "79": 1165, "80": 465,
+    "81": 705, "82": 695, "83": 860, "84": 1050, "85": 535, "86": 900, "87": 1355, "88": 735, "89": 880, "90": 1110,
+    "91": 1375, "92": 1350, "93": 760, "94": 1585, "95": 920, "96": 1425, "97": 1105, "98": 815, "99": 1840, "100": 745
+}
+
+# The user also provided a text list in the request, let's verify both.
+# Let's save the image table values as the current table of truth.
+state_path = "d:/cutting sunny/analyzer_state.json"
+try:
+    with open(state_path, 'r') as f:
+        state = json.load(f)
+except Exception:
+    state = {"slots": {"1": None, "2": None, "3": None, "4": None, "5": None, "6": None}}
+
+state["current_table"] = image_table
+
+with open(state_path, 'w') as f:
+    json.dump(state, f, indent=2)
+
+# Independent sum calculation for image table
+calculated_total = sum(image_table.values())
+provided_total = 90020
+
+print(f"Calculated image table total: {calculated_total}")
+print(f"Provided image table total: {provided_total}")
+if calculated_total == provided_total:
+    print("IMAGE TOTAL VERIFIED")
+else:
+    print("IMAGE TOTAL MISMATCH")

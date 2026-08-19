@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>कटर - Table & Number Analyzer</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Tesseract.js CDN for client-side table image OCR -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header>
+    <div class="logo-container">
+      <!-- Custom SVG Cutter Logo -->
+      <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+        <path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"></path>
+        <line x1="9" y1="9" x2="15" y2="9"></line>
+        <line x1="9" y1="13" x2="15" y2="13"></line>
+        <line x1="9" y1="17" x2="15" y2="17"></line>
+        <path d="M16 13h-4v-4"></path>
+      </svg>
+      <div>
+        <h1 style="display: inline-flex; align-items: center; gap: 8px;">कटर <span style="font-size: 14px; font-weight: 500; opacity: 0.7;">(Cutter)</span></h1>
+        <p style="font-size: 12px; color: var(--text-secondary);">Generic Number Table Analyzer</p>
+      </div>
+    </div>
+    <div id="table-status-badge" class="status-badge empty">
+      <span>●</span> No Table Loaded
+    </div>
+  </header>
+
+  <!-- Top Statistics Grid -->
+  <div class="stats-banner" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+    <div class="stat-box" style="background: var(--bg-card); border: 1px solid var(--border); padding: 18px; border-radius: var(--radius-lg); text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+      <span class="stat-label" style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-secondary); margin-bottom: 4px; font-weight: 700;">Calculated Total</span>
+      <div class="stat-value-container" style="font-size: 28px; font-weight: 700;">
+        <span id="stat-calc-total" style="color: var(--success); font-family: var(--font-header);">0</span> <span style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">Units</span>
+      </div>
+    </div>
+    <div class="stat-box" style="background: var(--bg-card); border: 1px solid var(--border); padding: 18px; border-radius: var(--radius-lg); text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+      <span class="stat-label" style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-secondary); margin-bottom: 4px; font-weight: 700;">Threshold Limit</span>
+      <div class="stat-value-container" style="font-size: 28px; font-weight: 700;">
+        <span id="stat-threshold" style="color: var(--accent); font-family: var(--font-header);">0</span> <span style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">Units</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-grid">
+    <!-- Left Column: Controls & Inputs -->
+    <div>
+      
+      <!-- Source of Truth: Table Input -->
+      <div class="card" style="position: relative;">
+        <!-- OCR Loader Overlay -->
+        <div id="ocr-loader" class="ocr-loading">
+          <div class="spinner"></div>
+          <p style="font-weight: 600;">Scanning Image with OCR...</p>
+          <p id="ocr-progress" style="font-size: 12px; color: var(--text-secondary);">Initializing engine...</p>
+        </div>
+
+        <div class="card-title">
+          <span>Source of Truth (Table Data)</span>
+          <span style="font-size: 12px; font-weight: normal; color: var(--text-secondary);">Format: 01=360</span>
+        </div>
+
+
+        <!-- Clean Image Upload Controls -->
+        <div class="upload-zone" id="drop-zone" style="padding: 16px; margin-bottom: 16px;">
+          <input type="file" id="file-input" accept="image/*" style="display: none;">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+            <svg class="upload-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-bottom: 0; width: 28px; height: 28px;">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+            </svg>
+            <span class="upload-text" style="font-size: 13px;">Drag & drop image here or</span>
+            <button type="button" id="btn-select-file" class="btn primary" style="padding: 6px 14px; font-size: 12px;">📁 Choose Image File</button>
+          </div>
+          <div class="preview-container" id="preview-container" style="margin-top: 12px;">
+            <button class="btn-remove-img" id="btn-remove-image">Remove</button>
+            <img id="image-preview" class="preview-image" src="" alt="Uploaded table preview">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div>
+            <label style="font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 4px;">Pasted Table (Raw Text):</label>
+            <textarea id="table-raw-input" rows="8" placeholder="01=360&#10;02=850&#10;03=390..."></textarea>
+            <button type="button" id="btn-paste-clipboard" class="btn" style="margin-top: 6px; font-size: 12px; width: 100%; display: flex; justify-content: center; gap: 6px;">📋 Paste Clipboard Text</button>
+          </div>
+          <div>
+            <label style="font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 4px;">Verification Total:</label>
+            <input type="number" id="table-provided-total" placeholder="Provided Total (e.g. 90020)" style="margin-bottom: 12px;">
+            
+            <div id="verification-panel" style="padding: 10px; border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.02); font-size: 13px; font-family: var(--font-mono);">
+              <div>CALCULATED: <span id="val-calc-total">0</span></div>
+              <div style="margin-top: 4px;">PROVIDED: <span id="val-prov-total">None</span></div>
+              <div id="verification-result-text" style="margin-top: 8px; font-weight: 700; color: var(--text-secondary);">STATUS: NO DATA</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slot Management -->
+      <div class="card">
+        <div class="card-title">
+          <span>6 Saved Number Slots</span>
+          <button id="btn-slots-clear-all" class="btn secondary" style="padding: 4px 10px; font-size: 11px;">Clear All</button>
+        </div>
+
+        <div class="slots-grid">
+          <!-- Slot 1 -->
+          <div class="slot-card" id="slot-card-1">
+            <div class="slot-header">
+              <span>Slot 1</span>
+            </div>
+            <div class="slot-value empty" id="slot-val-1">EMPTY</div>
+            <div class="slot-input-group" style="display: flex; gap: 4px; margin-top: 4px;">
+              <input type="number" min="1" max="100" class="slot-input-inline" id="slot-input-1" placeholder="Num" style="flex: 1; min-width: 0; padding: 6px; font-size: 12px;">
+              <button class="btn primary" id="slot-set-1" style="padding: 6px 8px; font-size: 11px; border-radius: var(--radius-sm);">Set</button>
+            </div>
+            <button class="btn-slot-clear" id="slot-clear-1">Clear</button>
+          </div>
+
+          <!-- Slot 2 -->
+          <div class="slot-card" id="slot-card-2">
+            <div class="slot-header">
+              <span>Slot 2</span>
+            </div>
+            <div class="slot-value empty" id="slot-val-2">EMPTY</div>
+            <div class="slot-input-group" style="display: flex; gap: 4px; margin-top: 4px;">
+              <input type="number" min="1" max="100" class="slot-input-inline" id="slot-input-2" placeholder="Num" style="flex: 1; min-width: 0; padding: 6px; font-size: 12px;">
+              <button class="btn primary" id="slot-set-2" style="padding: 6px 8px; font-size: 11px; border-radius: var(--radius-sm);">Set</button>
+            </div>
+            <button class="btn-slot-clear" id="slot-clear-2">Clear</button>
+          </div>
+
+          <!-- Slot 3 -->
+          <div class="slot-card" id="slot-card-3">
+            <div class="slot-header">
+              <span>Slot 3</span>
+            </div>
+            <div class="slot-value empty" id="slot-val-3">EMPTY</div>
+            <div class="slot-input-group" style="display: flex; gap: 4px; margin-top: 4px;">
+              <input type="number" min="1" max="100" class="slot-input-inline" id="slot-input-3" placeholder="Num" style="flex: 1; min-width: 0; padding: 6px; font-size: 12px;">
+              <button class="btn primary" id="slot-set-3" style="padding: 6px 8px; font-size: 11px; border-radius: var(--radius-sm);">Set</button>
+            </div>
+            <button class="btn-slot-clear" id="slot-clear-3">Clear</button>
+          </div>
+
+          <!-- Slot 4 -->
+          <div class="slot-card" id="slot-card-4">
+            <div class="slot-header">
+              <span>Slot 4</span>
+            </div>
+            <div class="slot-value empty" id="slot-val-4">EMPTY</div>
+            <div class="slot-input-group" style="display: flex; gap: 4px; margin-top: 4px;">
+              <input type="number" min="1" max="100" class="slot-input-inline" id="slot-input-4" placeholder="Num" style="flex: 1; min-width: 0; padding: 6px; font-size: 12px;">
+              <button class="btn primary" id="slot-set-4" style="padding: 6px 8px; font-size: 11px; border-radius: var(--radius-sm);">Set</button>
+            </div>
+            <button class="btn-slot-clear" id="slot-clear-4">Clear</button>
+          </div>
+
+          <!-- Slot 5 -->
+          <div class="slot-card" id="slot-card-5">
+            <div class="slot-header">
+              <span>Slot 5</span>
+            </div>
+            <div class="slot-value empty" id="slot-val-5">EMPTY</div>
+            <div class="slot-input-group" style="display: flex; gap: 4px; margin-top: 4px;">
+              <input type="number" min="1" max="100" class="slot-input-inline" id="slot-input-5" placeholder="Num" style="flex: 1; min-width: 0; padding: 6px; font-size: 12px;">
+              <button class="btn primary" id="slot-set-5" style="padding: 6px 8px; font-size: 11px; border-radius: var(--radius-sm);">Set</button>
+            </div>
+            <button class="btn-slot-clear" id="slot-clear-5">Clear</button>
+          </div>
+
+          <!-- Slot 6 -->
+          <div class="slot-card" id="slot-card-6">
+            <div class="slot-header">
+              <span>Slot 6</span>
+            </div>
+            <div class="slot-value empty" id="slot-val-6">EMPTY</div>
+            <div class="slot-input-group" style="display: flex; gap: 4px; margin-top: 4px;">
+              <input type="number" min="1" max="100" class="slot-input-inline" id="slot-input-6" placeholder="Num" style="flex: 1; min-width: 0; padding: 6px; font-size: 12px;">
+              <button class="btn primary" id="slot-set-6" style="padding: 6px 8px; font-size: 11px; border-radius: var(--radius-sm);">Set</button>
+            </div>
+            <button class="btn-slot-clear" id="slot-clear-6">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Panel (Simplification) -->
+      <div class="card" style="margin-bottom: 0;">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="text-align: left; margin-bottom: 8px;">
+            <label style="font-size: 13px; color: var(--text-secondary); display: block; margin-bottom: 6px; font-weight: 600;">
+              Base Numbers (One-time):
+            </label>
+            <input type="text" id="manual-bases" placeholder="e.g. 61, 97, 22" style="font-size: 15px; padding: 10px; border-radius: var(--radius-md); width: 100%; background: var(--bg-input); border: 1px solid var(--border); color: var(--text-primary);">
+          </div>
+          <div style="text-align: left;">
+            <label style="font-size: 13px; color: var(--text-secondary); display: block; margin-bottom: 6px; font-weight: 600;">
+              Auto-Calculated Threshold Limit (लिमिट = Total / 100):
+            </label>
+            <div id="calculated-threshold-display" style="font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: var(--accent); background: var(--bg-input); padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--border); text-align: center; margin-bottom: 4px;">
+              0
+            </div>
+          </div>
+          <button id="btn-run-analysis" class="btn primary" style="width: 100%; padding: 14px; font-size: 18px; justify-content: center; gap: 8px;">
+            ✂️ कटिंग (Process Cutting)
+          </button>
+          <button id="btn-clear-selection" class="btn secondary" style="width: 100%; justify-content: center;">
+            🔄 Clear Selections (Grid & Slots)
+          </button>
+        </div>
+
+        <!-- Terminal Console -->
+        <div id="console-output" class="console-box info">
+          <span>⚙️</span> System Ready. Select grid cells or set slots, then click 'Process Cutting'.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Column: Interactive Grid & Output -->
+    <div>
+      
+      <!-- Interactive Grid -->
+      <div class="card">
+        <div class="card-title">
+          <span>Interactive Table Grid (01 - 100)</span>
+          <span style="font-size: 12px; font-weight: normal; color: var(--text-secondary);">Click cells to select numbers for cutting</span>
+        </div>
+        <div class="grid-container" id="grid-container">
+          <!-- 100 grid cells will be dynamically generated here by JS -->
+        </div>
+      </div>
+
+      <!-- Result Output -->
+      <div class="card" style="margin-bottom: 0;">
+        <div class="card-title">
+          <span>Cutting Results (Final Output)</span>
+        </div>
+        
+        <div class="output-box">
+          <pre class="output-pre" id="output-text" style="max-height: 250px; margin-bottom: 16px;">No numbers analyzed yet.
+Click cells on the grid or add values to slots, then click 'Process Cutting'.</pre>
+          <button id="btn-copy-output" class="btn primary" style="width: 100%; padding: 12px; justify-content: center; gap: 8px;">
+            <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a3 3 0 016 0m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m-6 8h10.5m-5.5-5.5h5.5"></path>
+            </svg>
+            Copy Final Cutting Results
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

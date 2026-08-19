@@ -1,0 +1,14 @@
+{
+  "name": "sunny-cutting-android",
+  "version": "1.0.0",
+  "description": "Sunny Cutting Mobile App",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'No build step'"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/cli": "^6.1.2",
+    "@capacitor/core": "^6.1.2"
+  }
+}

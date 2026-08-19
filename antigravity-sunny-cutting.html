@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cutter - Premium Jantri Tool</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+    :root {
+      --bg-main: #f4faf7;         /* Very pale mint background */
+      --bg-card: #ffffff;         /* Pure white container */
+      --bg-input: #f2f7f4;        /* Light grey-mint input background */
+      --text-primary: #10251c;    /* Deep dark ink */
+      --text-secondary: #5a6e63;  /* Muted dark mint */
+      --accent: #efb945;          /* Gold */
+      --accent-hover: #dcae42;    /* Dark Gold */
+      --success: #10b981;         /* Emerald Green */
+      --success-bg: rgba(16, 185, 129, 0.1);
+      --error: #f43f5e;
+      --error-bg: rgba(244, 63, 94, 0.1);
+      --border: #d2e0d8;          /* Light green border */
+      
+      --font-sans: 'Inter', sans-serif;
+      --font-header: 'Space Grotesk', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: radial-gradient(circle at 90% 5%, #e6f3ee 0%, #f3faf6 50%, #e2eff7 100%);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      padding: 16px 16px 30px 16px;
+      line-height: 1.5;
+    }
+
+    .app-shell {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* 3D Top Header Panel */
+    .premium-header {
+      background: linear-gradient(135deg, #74c1a5, #57a68a);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(87, 166, 138, 0.15);
+      position: relative;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .hamburger-btn {
+      position: absolute;
+      left: 20px;
+      top: 24px;
+      background: none;
+      border: none;
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    .logo-sc {
+      font-family: var(--font-header);
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #f5c760, #dcae42);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 2px;
+      letter-spacing: -0.04em;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+
+    .app-title-text {
+      color: #ffffff;
+      font-family: var(--font-header);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* Top Tabs Grid Row */
+    .top-tabs-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tab-card {
+      background-color: #ffffff;
+      border: 1px solid rgba(210, 224, 216, 0.6);
+      border-radius: var(--radius-md);
+      padding: 14px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(18, 59, 44, 0.03);
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .tab-card:active {
+      transform: scale(0.96);
+    }
+
+    .tab-card.active {
+      background-color: #70c4a4;
+      border-color: #70c4a4;
+      color: #ffffff;
+    }
+
+    .tab-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .tab-num {
+      font-family: var(--font-header);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .tab-icon {
+      font-size: 16px;
+    }
+
+    .tab-card.active .tab-icon {
+      color: var(--accent);
+    }
+
+    .tab-label {
+      font-size: 11px;
+      font-weight: 700;
+      opacity: 0.9;
+    }
+
+    /* Stats Board Row */
+    .stats-board-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background-color: #ffffff;
+      border: 1px solid rgba(210, 224, 216, 0.6);
+      border-radius: var(--radius-md);
+      padding: 10px 4px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+      box-shadow: 0 4px 12px rgba(18, 59, 44, 0.03);
+    }
+
+    .stat-card-title {
+      font-size: 9px;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+    }
+
+    .stat-card-value {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* Main Grid Layout */
+    .main-grid-area {
+      margin-bottom: 20px;
+    }
+
+    /* Interactive 10x10 Grid */
+    .grid-panel {
+      flex-grow: 1;
+      background-color: #ffffff;
+      border: 1px solid rgba(210, 224, 216, 0.6);
+      border-radius: var(--radius-md);
+      padding: 8px;
+      box-shadow: 0 4px 15px rgba(18, 59, 44, 0.03);
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 4px;
+    }
+
+    .grid-cell {
+      background-color: #ffffff;
+      border: 1px solid rgba(210, 224, 216, 0.5);
+      border-radius: 4px;
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      min-width: 0;
+    }
+
+    .grid-cell:active {
+      transform: scale(0.92);
+    }
+
+    .grid-cell-num {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .grid-cell-val {
+      font-size: 8px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-top: 1px;
+    }
+
+    /* Selected cell in green (base numbers / slots) */
+    .grid-cell.selected {
+      background: linear-gradient(135deg, #a7f3d0, #6ee7b7);
+      border-color: #10b981;
+    }
+
+    .grid-cell.selected .grid-cell-num {
+      color: #064e3b;
+    }
+
+    .grid-cell.selected .grid-cell-val {
+      color: #064e3b;
+      font-weight: 700;
+    }
+
+    /* Threshold exceeded cell in red (auto-marked on load) */
+    .grid-cell.exceeded-red {
+      border: 2px solid var(--error);
+      background-color: rgba(244, 63, 94, 0.08);
+    }
+
+    .grid-cell.exceeded-red .grid-cell-num {
+      color: var(--error);
+      font-weight: 800;
+    }
+
+    /* Cutting hit active cell in glowing green */
+    .grid-cell.cutting-active {
+      background: linear-gradient(135deg, #2ae09c, #10b981);
+      border-color: #10b981;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+    }
+
+    .grid-cell.cutting-active .grid-cell-num {
+      color: #ffffff;
+    }
+
+    .grid-cell.cutting-active .grid-cell-val {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    /* Selected numbers box below grid */
+    .selected-numbers-container {
+      background-color: #ffffff;
+      border: 1px solid rgba(210, 224, 216, 0.6);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(18, 59, 44, 0.03);
+    }
+
+    .selected-numbers-display {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--text-primary);
+      word-break: break-all;
+    }
+
+    .selected-numbers-display span.gold-highlight {
+      color: #b7871e;
+      font-weight: 700;
+    }
+
+    /* Main Action Button */
+    .confirm-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #18986c, #0e7250);
+      color: #ffffff;
+      border: none;
+      padding: 16px;
+      border-radius: var(--radius-lg);
+      font-family: var(--font-header);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(14, 114, 80, 0.25);
+      transition: all 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    .confirm-btn:active {
+      transform: scale(0.98);
+      background: linear-gradient(135deg, #0e7250, #0a523a);
+    }
+
+    /* Bottom sheets (sliding drawers) */
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(16, 37, 28, 0.4);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 1500;
+    }
+
+    .drawer-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .bottom-drawer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #ffffff;
+      border-radius: 24px 24px 0 0;
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.12);
+      z-index: 1600;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 24px;
+    }
+
+    .bottom-drawer.active {
+      transform: translateY(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+
+    .drawer-title {
+      font-family: var(--font-header);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .btn-close-drawer {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 24px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    /* Drawer contents styles */
+    textarea {
+      width: 100%;
+      background-color: var(--bg-input);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 12px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      outline: none;
+      resize: vertical;
+    }
+
+    textarea:focus, input[type="text"]:focus, input[type="number"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(239, 185, 69, 0.15);
+    }
+
+    input[type="number"], input[type="text"] {
+      width: 100%;
+      background-color: var(--bg-input);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 12px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      outline: none;
+    }
+
+    .btn {
+      background-color: var(--bg-input);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, #f5c760, #dcae42);
+      color: #0d523a;
+      border-color: var(--accent);
+      box-shadow: 0 4px 12px rgba(239, 185, 69, 0.2);
+    }
+
+    .btn.danger-text {
+      background: none;
+      border: none;
+      color: var(--error);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .slots-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .slot-item {
+      background-color: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .slot-item.active {
+      border-color: rgba(239, 185, 69, 0.6);
+      background-color: rgba(239, 185, 69, 0.03);
+    }
+
+    .slot-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+    }
+
+    .slot-val-display {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .slot-val-display.empty {
+      color: rgba(16, 37, 28, 0.2);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .slot-input-field {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      padding: 6px;
+      border-radius: var(--radius-sm);
+      text-align: center;
+      outline: none;
+    }
+
+    .console-log {
+      background-color: #061911;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--success);
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .console-log.error {
+      color: var(--error);
+    }
+
+    .ocr-overlay {
+      position: absolute;
+      inset: 0;
+      background-color: rgba(14, 82, 59, 0.9);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      z-index: 100;
+      border-radius: var(--radius-lg);
+      display: none;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 4px solid rgba(255,255,255,0.1);
+      border-top: 4px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Verification Badge States */
+    .verification-badge-panel {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding: 8px 12px;
+      background-color: var(--bg-input);
+      border-radius: var(--radius-md);
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <!-- 3D Header -->
+    <div class="premium-header">
+      <button class="hamburger-btn" id="btn-hamburger">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px;">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <svg class="logo-svg" viewBox="0 0 100 100" style="width: 48px; height: 48px; margin: 0 auto 8px auto; display: block;">
+        <defs>
+          <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ffe27a" />
+            <stop offset="50%" stop-color="#efb945" />
+            <stop offset="100%" stop-color="#b7871e" />
+          </linearGradient>
+        </defs>
+        <!-- Outer Ring -->
+        <circle cx="50" cy="50" r="44" stroke="url(#gold-grad)" stroke-width="6" fill="none" />
+        <!-- Scissors cut line -->
+        <path d="M 15 50 L 85 50" stroke="#f4faf7" stroke-width="4" stroke-dasharray="6 4" />
+        <!-- Stylized Letter C curve -->
+        <path d="M 68 32 C 60 22, 40 22, 32 32 C 22 42, 22 58, 32 68 C 40 78, 60 78, 68 68" stroke="url(#gold-grad)" stroke-width="10" stroke-linecap="round" fill="none" />
+      </svg>
+      <div class="app-title-text" style="font-size: 16px; font-weight: 800; letter-spacing: 0.15em;">Cutter</div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="top-tabs-row">
+      <div class="tab-card" id="tab-btn-load">
+        <div class="tab-card-header">
+          <span class="tab-num">01</span>
+          <span class="tab-icon">➔</span>
+        </div>
+        <span class="tab-label">Load</span>
+      </div>
+      <div class="tab-card" id="tab-btn-slots">
+        <div class="tab-card-header">
+          <span class="tab-num">02</span>
+          <span class="tab-icon">📁</span>
+        </div>
+        <span class="tab-label">Saved Slots</span>
+      </div>
+      <div class="tab-card" id="tab-btn-cutting">
+        <div class="tab-card-header">
+          <span class="tab-num">03</span>
+          <span class="tab-icon">✂️</span>
+        </div>
+        <span class="tab-label">Cutting</span>
+      </div>
+    </div>
+
+    <!-- Stats Board Row -->
+    <div class="stats-board-row">
+      <div class="stat-card">
+        <span class="stat-card-title">Total Amt</span>
+        <span class="stat-card-value" id="stat-total">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card-title">Threshold</span>
+        <span class="stat-card-value" id="stat-threshold">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card-title">Cuts</span>
+        <span class="stat-card-value" id="stat-cuts">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card-title">Probability</span>
+        <span class="stat-card-value" style="font-size: 11px; font-weight: 800; color: var(--success);">High 90%</span>
+      </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="main-grid-area">
+      <!-- Grid Panel -->
+      <div class="grid-panel" style="width: 100%;">
+        <div id="grid-container" class="grid-container"></div>
+      </div>
+    </div>
+
+    <!-- Selected Numbers Display Card -->
+    <div class="selected-numbers-container">
+      <div class="selected-numbers-display" id="selected-numbers-display">
+        Bases: —
+      </div>
+    </div>
+
+    <!-- Primary Action Button -->
+    <button class="confirm-btn" id="btn-confirm-cutting">
+      Confirm Cutting
+    </button>
+
+  </div>
+
+  <!-- Drawers Backdrop -->
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
+
+  <!-- bottom drawer: Load Table -->
+  <div class="bottom-drawer" id="drawer-load">
+    <div id="ocr-loader" class="ocr-overlay">
+      <div class="spinner"></div>
+      <p style="font-weight: 700;">Scanning Image OCR...</p>
+      <p id="ocr-progress" style="font-size: 11px; color: #a4dcc5;">Initializing engine...</p>
+    </div>
+    
+    <div class="drawer-header">
+      <span class="drawer-title">01: Load Numbers</span>
+      <button class="btn-close-drawer" onclick="closeAllDrawers()">&times;</button>
+    </div>
+    <span class="hint-label" style="font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 8px;">
+      Pasted raw bet sheet table (Format: <code>01=360</code>, <code>02:850</code>, <code>03 200</code>)
+    </span>
+    <textarea id="table-raw-input" rows="6" placeholder="01=360&#10;02:850.5&#10;03 200..."></textarea>
+    
+    <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 10px; margin-top: 10px; margin-bottom: 10px;">
+      <input type="number" id="table-provided-total" placeholder="Provided Total">
+      <div class="file-input-wrapper">
+        <button class="btn" style="width: 100%; font-size: 12px;">📷 Image OCR</button>
+        <input type="file" id="file-input" accept="image/*">
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+      <button id="btn-load-table" class="btn primary">Load / Verify</button>
+      <button id="btn-clear-table" class="btn">Clear Table</button>
+    </div>
+
+    <div class="verification-badge-panel">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-size: 11px; font-weight: 700; color: var(--text-secondary);">Table Status:</span>
+        <div id="table-status-badge" class="status-badge empty"><span>●</span> Empty</div>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+        <span style="font-size: 11px; font-weight: 700; color: var(--text-secondary);">Calculated Total:</span>
+        <span id="drawer-calc-total" style="font-family: var(--font-mono); font-size: 14px; font-weight: 800; color: var(--success);">0</span>
+      </div>
+    </div>
+
+    <div id="parse-message" class="console-log" style="display: none;"></div>
+  </div>
+
+  <!-- bottom drawer: Saved Slots -->
+  <div class="bottom-drawer" id="drawer-slots">
+    <div class="drawer-header">
+      <span class="drawer-title">02: Saved Slots</span>
+      <button class="btn-close-drawer" onclick="closeAllDrawers()">&times;</button>
+    </div>
+    <span class="hint-label" style="font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 8px;">
+      Persistent saved base numbers (00-99). Remains on refresh.
+    </span>
+    <div class="slots-list">
+      <!-- Slot 1 -->
+      <div class="slot-item" id="slot-card-1">
+        <span class="slot-label">Slot 1</span>
+        <div class="slot-val-display empty" id="slot-val-display-1">EMPTY</div>
+        <input type="number" min="0" max="99" class="slot-input-field" id="slot-input-1" placeholder="00-99">
+      </div>
+      <!-- Slot 2 -->
+      <div class="slot-item" id="slot-card-2">
+        <span class="slot-label">Slot 2</span>
+        <div class="slot-val-display empty" id="slot-val-display-2">EMPTY</div>
+        <input type="number" min="0" max="99" class="slot-input-field" id="slot-input-2" placeholder="00-99">
+      </div>
+      <!-- Slot 3 -->
+      <div class="slot-item" id="slot-card-3">
+        <span class="slot-label">Slot 3</span>
+        <div class="slot-val-display empty" id="slot-val-display-3">EMPTY</div>
+        <input type="number" min="0" max="99" class="slot-input-field" id="slot-input-3" placeholder="00-99">
+      </div>
+      <!-- Slot 4 -->
+      <div class="slot-item" id="slot-card-4">
+        <span class="slot-label">Slot 4</span>
+        <div class="slot-val-display empty" id="slot-val-display-4">EMPTY</div>
+        <input type="number" min="0" max="99" class="slot-input-field" id="slot-input-4" placeholder="00-99">
+      </div>
+      <!-- Slot 5 -->
+      <div class="slot-item" id="slot-card-5">
+        <span class="slot-label">Slot 5</span>
+        <div class="slot-val-display empty" id="slot-val-display-5">EMPTY</div>
+        <input type="number" min="0" max="99" class="slot-input-field" id="slot-input-5" placeholder="00-99">
+      </div>
+      <!-- Slot 6 -->
+      <div class="slot-item" id="slot-card-6">
+        <span class="slot-label">Slot 6</span>
+        <div class="slot-val-display empty" id="slot-val-display-6">EMPTY</div>
+        <input type="number" min="0" max="99" class="slot-input-field" id="slot-input-6" placeholder="00-99">
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+      <button id="btn-save-slots" class="btn primary">Save Slots</button>
+      <button id="btn-clear-slots" class="btn danger-text">Clear Saved</button>
+    </div>
+  </div>
+
+  <!-- bottom drawer: Cutting Configurations -->
+  <div class="bottom-drawer" id="drawer-cutting">
+    <div class="drawer-header">
+      <span class="drawer-title">03: Base Entry</span>
+      <button class="btn-close-drawer" onclick="closeAllDrawers()">&times;</button>
+    </div>
+    <span class="hint-label" style="font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 8px;">
+      Add manual one-time bases (comma separated) to include in calculation
+    </span>
+    <textarea id="manual-bases" rows="3" placeholder="e.g. 61, 97, 22"></textarea>
+    <button id="btn-run-drawer-cutting" class="btn primary" style="width: 100%; margin-top: 12px; padding: 14px;">Close and Confirm Selections</button>
+  </div>
+
+  <!-- bottom drawer: Results -->
+  <div class="bottom-drawer" id="drawer-results">
+    <div class="drawer-header">
+      <span class="drawer-title">05: Cutting Result</span>
+      <button class="btn-close-drawer" onclick="closeAllDrawers()">&times;</button>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+      <div>
+        <div style="font-size: 11px; font-weight: 700; color: var(--error); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">Mota Numbers (400+)</div>
+        <div style="background-color: #1a0e10; border: 1px solid rgba(244, 63, 94, 0.2); border-radius: var(--radius-md); padding: 12px; height: 260px; overflow-y: auto;">
+          <pre id="result-output-left" style="font-family: var(--font-mono); font-size: 13px; color: #fcccd4; white-space: pre-wrap; margin: 0;">—</pre>
+        </div>
+        <button id="btn-copy-left" class="btn" style="width: 100%; margin-top: 8px; font-size: 11px; padding: 10px; background-color: var(--error-bg); border-color: rgba(244, 63, 94, 0.3); color: var(--error);">📋 Copy 400+</button>
+      </div>
+      <div>
+        <div style="font-size: 11px; font-weight: 700; color: var(--success); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">Bache Numbers (&lt;400)</div>
+        <div style="background-color: #061911; border: 1px solid rgba(16, 185, 129, 0.2); border-radius: var(--radius-md); padding: 12px; height: 260px; overflow-y: auto;">
+          <pre id="result-output-right" style="font-family: var(--font-mono); font-size: 13px; color: #e8f8ed; white-space: pre-wrap; margin: 0;">—</pre>
+        </div>
+        <button id="btn-copy-right" class="btn" style="width: 100%; margin-top: 8px; font-size: 11px; padding: 10px; background-color: var(--success-bg); border-color: rgba(16, 185, 129, 0.3); color: var(--success);">📋 Copy Remaining</button>
+      </div>
+    </div>
+
+    <button id="btn-copy-result" class="btn primary" style="width: 100%; padding: 14px; gap: 8px; font-size: 16px;">
+      📋 Copy Combined Results
+    </button>
+  </div>
+
+  <script>
+    // State management
+    let currentTable = {};
+    const SLOT_STORAGE_KEY = 'sunny-cutting-slots-v1';
+    let slots = [null, null, null, null, null, null];
+    let selectedNumbers = new Set();
+    let cuttingActiveNumbers = new Set();
+
+    // DOM Elements
+    let tableStatusBadge, tableRawInput, tableProvidedTotal, statCalcTotal, statThreshold, statCuts, statTotal;
+    let gridContainer, resultOutputLeft, resultOutputRight, consoleLogMsg, manualBasesInput, selectedNumbersDisplay;
+    let fileInput, ocrLoader, ocrProgress, drawerBackdrop;
+
+    function init() {
+      tableStatusBadge = document.getElementById("table-status-badge");
+      tableRawInput = document.getElementById("table-raw-input");
+      tableProvidedTotal = document.getElementById("table-provided-total");
+      statThreshold = document.getElementById("stat-threshold");
+      statCuts = document.getElementById("stat-cuts");
+      statTotal = document.getElementById("stat-total");
+      gridContainer = document.getElementById("grid-container");
+      resultOutputLeft = document.getElementById("result-output-left");
+      resultOutputRight = document.getElementById("result-output-right");
+      consoleLogMsg = document.getElementById("parse-message");
+      manualBasesInput = document.getElementById("manual-bases");
+      selectedNumbersDisplay = document.getElementById("selected-numbers-display");
+      drawerBackdrop = document.getElementById("drawer-backdrop");
+
+      fileInput = document.getElementById("file-input");
+      ocrLoader = document.getElementById("ocr-loader");
+      ocrProgress = document.getElementById("ocr-progress");
+
+      // Load Saved slots
+      slots = readSavedSlots();
+      updateSlotsUI();
+
+      // Clear state on reload
+      currentTable = {};
+      tableRawInput.value = "";
+      tableProvidedTotal.value = "";
+      if (manualBasesInput) manualBasesInput.value = "";
+      
+      generateGrid();
+      setupEventListeners();
+      updateVerificationDisplays();
+      updateSelectedBasesText();
+
+      // Drawer backdrop click binds
+      drawerBackdrop.addEventListener("click", closeAllDrawers);
+
+      // Run self-tests
+      window.analyzerSelfTest = runAnalyzerSelfTests();
+      console.info(window.analyzerSelfTest.message || window.analyzerSelfTest.errors);
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+
+    function setupEventListeners() {
+      // Tab card clicks to open respective bottom drawers
+      document.getElementById("tab-btn-load").addEventListener("click", () => {
+        setActiveTab("tab-btn-load");
+        openDrawer("drawer-load");
+      });
+      document.getElementById("tab-btn-slots").addEventListener("click", () => {
+        setActiveTab("tab-btn-slots");
+        openDrawer("drawer-slots");
+      });
+      document.getElementById("tab-btn-cutting").addEventListener("click", () => {
+        setActiveTab("tab-btn-cutting");
+        openDrawer("drawer-cutting");
+      });
+
+      // Hamburger menu button trigger
+      document.getElementById("btn-hamburger").addEventListener("click", () => {
+        alert("Cutter Jantri App v1.0.0\nTheme: Light-Mint\nStatus: Online");
+      });
+
+      // Actions inside drawers
+      document.getElementById("btn-load-table").addEventListener("click", () => {
+        const text = tableRawInput.value;
+        const result = loadNewTable(text);
+        if (!result.success) {
+          showLogConsole(result.message, true);
+          return;
+        }
+        updateVerificationDisplays(result);
+        runAnalysis();
+      });
+
+      document.getElementById("btn-clear-table").addEventListener("click", () => {
+        tableRawInput.value = "";
+        tableProvidedTotal.value = "";
+        currentTable = {};
+        cuttingActiveNumbers.clear();
+        updateGridValues();
+        updateGridCuttingUI();
+        updateVerificationDisplays();
+        resultOutput.textContent = "Saved slots या grid पर number सेलेक्ट कर \"Confirm Cutting\" दबाएँ।";
+        showLogConsole("", false);
+      });
+
+      document.getElementById("btn-save-slots").addEventListener("click", () => {
+        saveSlotsFromInputs();
+      });
+
+      document.getElementById("btn-clear-slots").addEventListener("click", () => {
+        clearAllSlots();
+      });
+
+      document.getElementById("btn-run-drawer-cutting").addEventListener("click", () => {
+        closeAllDrawers();
+        runAnalysis();
+      });
+
+      // Main Confirm Cutting button triggers analysis and opens results drawer
+      document.getElementById("btn-confirm-cutting").addEventListener("click", () => {
+        runAnalysis();
+        openDrawer("drawer-results");
+      });
+
+      document.getElementById("btn-copy-result").addEventListener("click", copyCombinedResult);
+      document.getElementById("btn-copy-left").addEventListener("click", () => copyText("result-output-left", "btn-copy-left"));
+      document.getElementById("btn-copy-right").addEventListener("click", () => copyText("result-output-right", "btn-copy-right"));
+
+      if (fileInput) {
+        fileInput.addEventListener("change", (e) => {
+          if (e.target.files && e.target.files.length > 0) {
+            handleImageOCR(e.target.files[0]);
+          }
+        });
+      }
+
+      if (manualBasesInput) {
+        manualBasesInput.addEventListener("input", () => {
+          updateSelectedBasesText();
+          updateGridSelectionUI();
+        });
+      }
+    }
+
+    // Modal drawers handles
+    function openDrawer(id) {
+      closeAllDrawers();
+      const drawer = document.getElementById(id);
+      if (drawer) {
+        drawer.classList.add("active");
+        drawerBackdrop.classList.add("active");
+      }
+    }
+
+    function closeAllDrawers() {
+      document.querySelectorAll(".bottom-drawer").forEach(el => el.classList.remove("active"));
+      drawerBackdrop.classList.remove("active");
+      // Remove active states from tabs
+      document.querySelectorAll(".tab-card").forEach(el => el.classList.remove("active"));
+    }
+
+    function setActiveTab(id) {
+      document.querySelectorAll(".tab-card").forEach(el => el.classList.remove("active"));
+      const tab = document.getElementById(id);
+      if (tab) tab.classList.add("active");
+    }
+
+    // Parsers & Formatters
+    function parseAmount(val) {
+      if (val === null || val === undefined) return null;
+      const clean = String(val).trim()
+        .replace(/₹/g, '')
+        .replace(/\bRs\.?\s*/gi, '')
+        .replace(/,/g, '')
+        .trim();
+      if (!/^\d+(?:\.\d+)?$/.test(clean)) return null;
+      const amount = Number(clean);
+      return Number.isFinite(amount) ? amount : null;
+    }
+
+    function formatNumber(num) {
+      const val = parseInt(num, 10);
+      if (isNaN(val) || val < 0 || val > 99) return null;
+      return val < 10 ? `0${val}` : `${val}`;
+    }
+
+    // Grid rendering 00-99
+    function generateGrid() {
+      if (!gridContainer) return;
+      gridContainer.innerHTML = "";
+      for (let i = 0; i <= 99; i++) {
+        const numStr = formatNumber(i);
+        const cell = document.createElement("div");
+        cell.className = "grid-cell";
+        cell.id = `cell-${numStr}`;
+        
+        const numSpan = document.createElement("span");
+        numSpan.className = "grid-cell-num";
+        numSpan.textContent = numStr;
+
+        const valSpan = document.createElement("span");
+        valSpan.className = "grid-cell-val";
+        valSpan.id = `cell-val-${numStr}`;
+        valSpan.textContent = "0";
+
+        cell.appendChild(numSpan);
+        cell.appendChild(valSpan);
+        
+        cell.addEventListener("click", () => toggleGridCellSelection(numStr));
+        gridContainer.appendChild(cell);
+      }
+      updateGridValues();
+    }
+
+    function toggleGridCellSelection(numStr) {
+      if (selectedNumbers.has(numStr)) {
+        selectedNumbers.delete(numStr);
+      } else {
+        selectedNumbers.add(numStr);
+      }
+      updateGridSelectionUI();
+      updateSelectedBasesText();
+      runAnalysis();
+    }
+
+    function updateGridSelectionUI() {
+      const manualBasesText = manualBasesInput ? manualBasesInput.value : "";
+      const manualBases = (manualBasesText.match(/\d{1,3}/g) || []).map(n => formatNumber(n)).filter(Boolean);
+      
+      const allBases = new Set();
+      selectedNumbers.forEach(val => allBases.add(val));
+      slots.forEach(val => { if (val !== null && val !== undefined) allBases.add(val); });
+      manualBases.forEach(val => allBases.add(val));
+
+      for (let i = 0; i <= 99; i++) {
+        const numStr = formatNumber(i);
+        const cell = document.getElementById(`cell-${numStr}`);
+        if (!cell) continue;
+        if (allBases.has(numStr)) {
+          cell.classList.add("selected");
+        } else {
+          cell.classList.remove("selected");
+        }
+      }
+    }
+
+    function updateGridCuttingUI() {
+      for (let i = 0; i <= 99; i++) {
+        const numStr = formatNumber(i);
+        const cell = document.getElementById(`cell-${numStr}`);
+        if (!cell) continue;
+        if (cuttingActiveNumbers.has(numStr)) {
+          cell.classList.add("cutting-active");
+        } else {
+          cell.classList.remove("cutting-active");
+        }
+      }
+    }
+
+    function updateGridValues() {
+      const calculatedTotal = Object.values(currentTable).reduce((a, b) => a + b, 0);
+      const threshold = calculatedTotal / 100;
+
+      for (let i = 0; i <= 99; i++) {
+        const numStr = formatNumber(i);
+        const valSpan = document.getElementById(`cell-val-${numStr}`);
+        const cell = document.getElementById(`cell-${numStr}`);
+        if (!valSpan || !cell) continue;
+        const val = currentTable[numStr];
+        valSpan.textContent = (val !== undefined && val !== null) ? val : "0";
+
+        // Auto-mark with red if amount exceeds threshold
+        if (val !== undefined && val !== null && val > threshold && threshold > 0) {
+          cell.classList.add("exceeded-red");
+        } else {
+          cell.classList.remove("exceeded-red");
+        }
+      }
+    }
+
+    // Saved slots persistence
+    function readSavedSlots() {
+      try {
+        const stored = JSON.parse(localStorage.getItem(SLOT_STORAGE_KEY));
+        if (Array.isArray(stored) && stored.length === 6) {
+          return stored.map(n => formatNumber(n));
+        }
+      } catch (e) {
+        console.error(e);
+      }
+      return [null, null, null, null, null, null];
+    }
+
+    function persistSavedSlots() {
+      localStorage.setItem(SLOT_STORAGE_KEY, JSON.stringify(slots));
+    }
+
+    function updateSlotsUI() {
+      for (let i = 1; i <= 6; i++) {
+        const slotVal = slots[i - 1];
+        const displayDiv = document.getElementById(`slot-val-display-${i}`);
+        const inputField = document.getElementById(`slot-input-${i}`);
+        const cardDiv = document.getElementById(`slot-card-${i}`);
+
+        if (slotVal !== null && slotVal !== undefined) {
+          displayDiv.className = "slot-val-display";
+          displayDiv.textContent = slotVal;
+          inputField.value = slotVal;
+          if (cardDiv) cardDiv.classList.add("active");
+        } else {
+          displayDiv.className = "slot-val-display empty";
+          displayDiv.textContent = "EMPTY";
+          inputField.value = "";
+          if (cardDiv) cardDiv.classList.remove("active");
+        }
+      }
+      updateSelectedBasesText();
+    }
+
+    function saveSlotsFromInputs() {
+      const temp = [];
+      for (let i = 1; i <= 6; i++) {
+        const inputVal = document.getElementById(`slot-input-${i}`).value.trim();
+        const formatted = formatNumber(inputVal);
+        temp.push(formatted);
+      }
+      slots = temp;
+      persistSavedSlots();
+      updateSlotsUI();
+      showLogConsole("Saved Slots updated in storage successfully!");
+      runAnalysis();
+    }
+
+    function clearAllSlots() {
+      slots = [null, null, null, null, null, null];
+      persistSavedSlots();
+      updateSlotsUI();
+      showLogConsole("Cleared Saved Slots successfully!");
+      runAnalysis();
+    }
+
+    // Display selected numbers dynamically below grid
+    function updateSelectedBasesText() {
+      const bases = [];
+      slots.forEach(val => { if (val !== null && val !== undefined) bases.push(`<span class="gold-highlight">${val}</span>`); });
+      selectedNumbers.forEach(val => bases.push(val));
+      const manualBasesText = manualBasesInput ? manualBasesInput.value : "";
+      const manualBases = manualBasesText.match(/\d{1,3}/g) || [];
+      manualBases.forEach(val => bases.push(formatNumber(val)));
+
+      const filtered = bases.filter(Boolean);
+      if (filtered.length === 0) {
+        selectedNumbersDisplay.innerHTML = "Bases: —";
+      } else {
+        selectedNumbersDisplay.innerHTML = "Bases: " + filtered.join(", ");
+      }
+    }
+
+    // Parser engine
+    function parseNumberAmountLine(line) {
+      if (!line || !line.trim()) return null;
+      const clean = line.trim();
+      const match = clean.match(/^(\d{1,3})\s*(?:=|:|\s)\s*(.+)$/);
+      if (!match) return null;
+
+      const numStr = formatNumber(match[1]);
+      if (numStr === null) return { valid: false, reason: "INVALID_NUMBER", raw: line };
+
+      const rawAmount = match[2].trim();
+      const amount = parseAmount(rawAmount);
+      if (amount === null) return { valid: false, reason: "UNREADABLE_AMOUNT", number: numStr, raw: line };
+
+      return { valid: true, number: numStr, amount: amount, raw: line };
+    }
+
+    function loadNewTable(text) {
+      const table = {};
+      const errors = [];
+      const duplicates = new Set();
+      
+      if (!text || !text.trim()) {
+        return { success: false, message: "No data to load.", count: 0 };
+      }
+
+      const lines = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n").split("\n");
+      
+      for (let line of lines) {
+        line = line.trim();
+        if (!line) continue;
+
+        const parsed = parseNumberAmountLine(line);
+        if (!parsed) continue;
+
+        if (!parsed.valid) {
+          errors.push(parsed);
+          continue;
+        }
+
+        if (table[parsed.number] !== undefined) {
+          duplicates.add(parsed.number);
+        }
+        
+        table[parsed.number] = parsed.amount;
+      }
+
+      const count = Object.keys(table).length;
+      if (count === 0) {
+        return { success: false, message: "No valid number/amount entries found.", count: 0 };
+      }
+
+      currentTable = table;
+      updateGridValues();
+
+      return {
+        success: true,
+        message: "Bet sheet loaded successfully.",
+        count: count,
+        errors: errors,
+        duplicates: [...duplicates]
+      };
+    }
+
+    function updateVerificationDisplays(parsedResult) {
+      const calculatedTotal = Object.values(currentTable).reduce((a, b) => a + b, 0);
+      const threshold = calculatedTotal / 100;
+      statThreshold.textContent = threshold.toFixed(0);
+      
+      if (statTotal) {
+        statTotal.textContent = calculatedTotal.toLocaleString();
+      }
+
+      const drawerCalcEl = document.getElementById("drawer-calc-total");
+      if (drawerCalcEl) {
+        drawerCalcEl.textContent = calculatedTotal.toLocaleString();
+      }
+
+      const providedText = tableProvidedTotal.value.trim();
+      
+      if (Object.keys(currentTable).length === 0) {
+        tableStatusBadge.className = "status-badge empty";
+        tableStatusBadge.innerHTML = "<span>●</span> Empty";
+        if (drawerCalcEl) drawerCalcEl.textContent = "0";
+        if (statTotal) statTotal.textContent = "0";
+        return;
+      }
+
+      if (providedText !== "") {
+        const providedTotal = parseFloat(providedText);
+        if (Math.abs(calculatedTotal - providedTotal) < 0.01) {
+          tableStatusBadge.className = "status-badge verified";
+          tableStatusBadge.innerHTML = "<span>●</span> VERIFIED";
+        } else {
+          tableStatusBadge.className = "status-badge mismatch";
+          tableStatusBadge.innerHTML = "<span>●</span> MISMATCH";
+        }
+      } else {
+        tableStatusBadge.className = "status-badge empty";
+        tableStatusBadge.innerHTML = "<span>●</span> NOT COMPARED";
+      }
+
+      if (parsedResult) {
+        let msg = `Loaded ${parsedResult.count} entries. `;
+        if (parsedResult.duplicates.length > 0) {
+          msg += `⚠️ Duplicates: ${parsedResult.duplicates.join(", ")}. `;
+        }
+        if (parsedResult.errors.length > 0) {
+          msg += `Skipped: ${parsedResult.errors.length}.`;
+        }
+        showLogConsole(msg, parsedResult.errors.length > 0);
+      }
+    }
+
+    // Round to nearest 10
+    function roundFigure(val) {
+      const roundedInt = Math.round(val);
+      const remainder = roundedInt % 10;
+      if (remainder >= 5) {
+        return roundedInt + (10 - remainder);
+      } else if (remainder <= -5) {
+        return roundedInt - (10 + remainder);
+      } else {
+        return roundedInt - remainder;
+      }
+    }
+
+    // Candidates generator
+    function generateCandidates(baseNumbers) {
+      const candidates = new Set();
+      const add = valStr => {
+        const num = parseInt(valStr, 10);
+        if (Number.isInteger(num) && num >= 0 && num <= 99) {
+          candidates.add(formatNumber(num));
+        }
+      };
+
+      const uniqueBases = [...new Set(baseNumbers.map(n => formatNumber(n)).filter(Boolean))];
+
+      for (const baseKey of uniqueBases) {
+        const base = Number(baseKey);
+        add(baseKey);
+        
+        const reverseStr = baseKey.split('').reverse().join('');
+        const reverse = Number(reverseStr);
+        add(reverseStr);
+
+        const seeds = [base, base - 10, base + 10, reverse, reverse - 10, reverse + 10];
+        seeds.forEach(seed => {
+          if (seed >= -1 && seed <= 101) {
+            add(seed - 1);
+            add(seed);
+            add(seed + 1);
+          }
+        });
+
+        if (baseKey.length === 2) {
+          const X = Number(baseKey[0]);
+          const Y = Number(baseKey[1]);
+          for (let unit = 1; unit <= 9; unit++) {
+            add(X * 10 + unit);
+            add(Y * 10 + unit);
+          }
+          for (let tens = 0; tens <= 9; tens++) {
+            add(tens * 10 + X);
+            add(tens * 10 + Y);
+          }
+        }
+      }
+      return [...candidates];
+    }
+
+    // Analysis trigger
+    function runAnalysis() {
+      if (!resultOutputLeft || !resultOutputRight) return;
+
+      const calculatedTotal = Object.values(currentTable).reduce((a, b) => a + b, 0);
+      const threshold = calculatedTotal / 100;
+
+      // Gather base inputs
+      const manualBasesText = manualBasesInput ? manualBasesInput.value : "";
+      const manualBases = manualBasesText.match(/\d{1,3}/g) || [];
+      const baseNumbers = [];
+
+      slots.forEach(val => { if (val !== null && val !== undefined) baseNumbers.push(val); });
+      selectedNumbers.forEach(val => baseNumbers.push(val));
+      manualBases.forEach(val => baseNumbers.push(val));
+
+      if (baseNumbers.length === 0) {
+        resultOutputLeft.textContent = "—";
+        resultOutputRight.textContent = "—";
+        cuttingActiveNumbers.clear();
+        updateGridCuttingUI();
+        statCuts.textContent = "0";
+        return;
+      }
+
+      const candidates = generateCandidates(baseNumbers);
+      const results = [];
+      const notFound = [];
+      cuttingActiveNumbers.clear();
+
+      candidates.forEach(numStr => {
+        const originalAmount = currentTable[numStr];
+        if (originalAmount === undefined || originalAmount === null) {
+          notFound.push(numStr);
+          return;
+        }
+        if (originalAmount > threshold) {
+          const rawCutting = originalAmount - threshold;
+          const roundedAmount = roundFigure(rawCutting);
+          if (roundedAmount > 0) {
+            results.push({ number: numStr, roundedAmount: roundedAmount });
+            cuttingActiveNumbers.add(numStr);
+          }
+        }
+      });
+
+      updateGridCuttingUI();
+      statCuts.textContent = cuttingActiveNumbers.size;
+
+      results.sort((a, b) => b.roundedAmount - a.roundedAmount || Number(a.number) - Number(b.number));
+
+      const resultsMota = [];
+      const resultsBache = [];
+      
+      for (const item of results) {
+        if (item.roundedAmount >= 400) {
+          resultsMota.push(item);
+        } else {
+          resultsBache.push(item);
+        }
+      }
+
+      // Format Left Box (Mota 400+)
+      const leftLines = [];
+      let leftTotal = 0;
+      for (const item of resultsMota) {
+        leftLines.push(`${item.number} = ${item.roundedAmount}`);
+        leftTotal += item.roundedAmount;
+      }
+      if (leftLines.length > 0) {
+        leftLines.push("", `GRAND TOTAL = ${leftTotal}`);
+        resultOutputLeft.textContent = leftLines.join("\n");
+      } else {
+        resultOutputLeft.textContent = "—";
+      }
+
+      // Format Right Box (Bache <400)
+      const rightLines = [];
+      let rightTotal = 0;
+      for (const item of resultsBache) {
+        rightLines.push(`${item.number} = ${item.roundedAmount}`);
+        rightTotal += item.roundedAmount;
+      }
+      if (rightLines.length > 0) {
+        rightLines.push("", `GRAND TOTAL = ${rightTotal}`);
+      }
+      if (notFound.length > 0) {
+        rightLines.push("", `NOT FOUND = ${notFound.sort().join(", ")}`);
+      }
+      
+      if (rightLines.length > 0) {
+        resultOutputRight.textContent = rightLines.join("\n");
+      } else {
+        resultOutputRight.textContent = "—";
+      }
+    }
+
+    function copyText(elementId, buttonId) {
+      const el = document.getElementById(elementId);
+      const btn = document.getElementById(buttonId);
+      if (!el || !btn) return;
+      const text = el.textContent;
+      if (!text || text.trim() === "—" || text.startsWith("Saved slots")) return;
+      navigator.clipboard.writeText(text).then(() => {
+        const originalText = btn.innerHTML;
+        btn.textContent = "✓ Copied!";
+        btn.style.backgroundColor = "var(--success)";
+        btn.style.color = "#ffffff";
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.style.backgroundColor = "";
+          btn.style.color = "";
+        }, 1400);
+      });
+    }
+
+    function copyCombinedResult() {
+      const leftText = resultOutputLeft.textContent;
+      const rightText = resultOutputRight.textContent;
+      
+      const leftPart = (leftText.trim() === "—" || leftText.trim() === "") ? "" : `=== MOTA NUMBERS (400+) ===\n${leftText}`;
+      const rightPart = (rightText.trim() === "—" || rightText.trim() === "") ? "" : `=== BACHE NUMBERS (<400) ===\n${rightText}`;
+      
+      const combined = [leftPart, rightPart].filter(Boolean).join("\n\n");
+      if (!combined) return;
+
+      navigator.clipboard.writeText(combined).then(() => {
+        const btn = document.getElementById("btn-copy-result");
+        const originalText = btn.innerHTML;
+        btn.textContent = "✓ Combined Copied!";
+        btn.style.backgroundColor = "var(--success)";
+        setTimeout(() => { btn.innerHTML = originalText; btn.style.backgroundColor = ""; }, 1400);
+      });
+    }
+
+    function handleImageOCR(file) {
+      if (!file.type.startsWith("image/")) return;
+      ocrLoader.style.display = "flex";
+      ocrProgress.textContent = "Starting OCR Engine...";
+
+      Tesseract.recognize(
+        file,
+        'eng',
+        { logger: m => { if (m.status === 'recognizing') ocrProgress.textContent = `Scanning: ${(m.progress * 100).toFixed(0)}%`; } }
+      )
+      .then(({ data: { text } }) => {
+        ocrLoader.style.display = "none";
+        const parsedResult = loadNewTable(text);
+        if (parsedResult.success) {
+          tableRawInput.value = text;
+          updateVerificationDisplays(parsedResult);
+          runAnalysis();
+        } else {
+          showLogConsole("OCR scan completed, but no pattern matched.", true);
+        }
+      })
+      .catch(err => {
+        ocrLoader.style.display = "none";
+        console.error(err);
+        showLogConsole("Image OCR scan failed.", true);
+      });
+    }
+
+    function showLogConsole(msg, isError = false) {
+      if (!consoleLogMsg) return;
+      if (!msg) {
+        consoleLogMsg.style.display = "none";
+        return;
+      }
+      consoleLogMsg.style.display = "flex";
+      consoleLogMsg.className = isError ? "console-log error" : "console-log";
+      consoleLogMsg.innerHTML = `<span>⚙️</span> ${msg}`;
+    }
+
+    // Self testing
+    function runAnalyzerSelfTests() {
+      const errors = [];
+      const originalTable = { ...currentTable };
+      const originalSlots = [...slots];
+      const originalSelected = new Set(selectedNumbers);
+      const check = (condition, label) => { if (!condition) errors.push(label); };
+      
+      const one = parseNumberAmountLine('01=360');
+      check(one?.valid && one.number === '01' && one.amount === 360, 'parsing left number / right amount');
+      
+      const zero = parseNumberAmountLine('00=430');
+      check(zero?.valid && zero.number === '00' && zero.amount === 430, '00 preservation');
+      
+      const comma = parseNumberAmountLine('05=1,000');
+      check(comma?.amount === 1000, 'comma amount parsing');
+      
+      const invalid = parseNumberAmountLine('06=ABC');
+      check(invalid?.valid === false && invalid?.reason === 'UNREADABLE_AMOUNT', 'unreadable amount parsing');
+      
+      const candidates = generateCandidates(['61']);
+      check(candidates.includes('16') && candidates.includes('06'), 'palti and plus/minus candidates');
+      
+      currentTable = originalTable;
+      slots = originalSlots;
+      selectedNumbers = originalSelected;
+      
+      return errors.length 
+        ? { success: false, errors } 
+        : { success: true, message: 'ALL ANALYZER SELF-TESTS PASSED.' };
+    }
+  </script>
+</body>
+</html>
