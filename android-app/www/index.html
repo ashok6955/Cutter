@@ -926,6 +926,13 @@
         }
         updateVerificationDisplays(result);
         runAnalysis();
+
+        // Debug Alert popup
+        const calculatedTotal = Object.values(currentTable).reduce((a, b) => a + b, 0);
+        const threshold = calculatedTotal / 100;
+        const blackLimit = threshold + (calculatedTotal <= 30000 ? 300 : (calculatedTotal / 100) * 3);
+        const heavyCount = Object.entries(currentTable).filter(([k, v]) => v > blackLimit).length;
+        alert(`Cutter Debug Info:\n- Total Amount: ${calculatedTotal}\n- Threshold: ${threshold}\n- Black Limit: ${blackLimit}\n- Heavy numbers found: ${heavyCount}`);
       });
 
       document.getElementById("btn-clear-table").addEventListener("click", () => {
@@ -1085,6 +1092,7 @@
       const calculatedTotal = Object.values(currentTable).reduce((a, b) => a + b, 0);
       const threshold = calculatedTotal / 100;
       const blackLimit = threshold + (calculatedTotal <= 30000 ? 300 : (calculatedTotal / 100) * 3);
+      console.log(`Cutter Debug: Total=${calculatedTotal}, Threshold=${threshold}, BlackLimit=${blackLimit}`);
 
       for (let i = 0; i <= 99; i++) {
         const numStr = formatNumber(i);
@@ -1100,6 +1108,7 @@
         if (cuttingActiveNumbers.has(numStr)) {
           cell.classList.add("cutting-active");
         } else if (val !== undefined && val !== null && val > blackLimit && blackLimit > 0) {
+          console.log(`Cutter Debug Heavy Cell: Number=${numStr}, Val=${val}, BlackLimit=${blackLimit}`);
           cell.classList.add("max-black");
         }
       }
