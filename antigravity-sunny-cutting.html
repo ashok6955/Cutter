@@ -1105,15 +1105,20 @@
 
         const val = currentTable[numStr];
 
-        if (cuttingActiveNumbers.has(numStr)) {
-          cell.classList.add("cutting-active");
-        } else if (val !== undefined && val !== null) {
+        // Heavy numbers are ALWAYS black, regardless of cutting active status!
+        if (val !== undefined && val !== null) {
           const numVal = Number(val);
           const numLimit = Number(blackLimit);
           if (numVal > numLimit && numLimit > 0) {
             console.log(`Cutter Debug Heavy Cell: Number=${numStr}, Val=${val}, BlackLimit=${blackLimit}`);
             cell.classList.add("max-black");
+            continue; // Keep it black and skip green check
           }
+        }
+
+        // Otherwise, if it is a cutting candidate, make it neon green
+        if (cuttingActiveNumbers.has(numStr)) {
+          cell.classList.add("cutting-active");
         }
       }
     }
