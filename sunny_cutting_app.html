@@ -1082,14 +1082,25 @@
     }
 
     function updateGridCuttingUI() {
+      const calculatedTotal = Object.values(currentTable).reduce((a, b) => a + b, 0);
+      const threshold = calculatedTotal / 100;
+      const blackLimit = threshold + (calculatedTotal <= 30000 ? 300 : (calculatedTotal / 100) * 3);
+
       for (let i = 0; i <= 99; i++) {
         const numStr = formatNumber(i);
         const cell = document.getElementById(`cell-${numStr}`);
         if (!cell) continue;
+
+        // Reset highlight states
+        cell.classList.remove("cutting-active");
+        cell.classList.remove("max-black");
+
+        const val = currentTable[numStr];
+
         if (cuttingActiveNumbers.has(numStr)) {
           cell.classList.add("cutting-active");
-        } else {
-          cell.classList.remove("cutting-active");
+        } else if (val !== undefined && val !== null && val > blackLimit && blackLimit > 0) {
+          cell.classList.add("max-black");
         }
       }
     }
@@ -1097,9 +1108,6 @@
     function updateGridValues() {
       const calculatedTotal = Object.values(currentTable).reduce((a, b) => a + b, 0);
       const threshold = calculatedTotal / 100;
-
-      // Find the absolute maximum value present in the table
-      const maxVal = Object.keys(currentTable).length > 0 ? Math.max(...Object.values(currentTable)) : 0;
 
       for (let i = 0; i <= 99; i++) {
         const numStr = formatNumber(i);
@@ -1114,13 +1122,6 @@
           cell.classList.add("exceeded-red");
         } else {
           cell.classList.remove("exceeded-red");
-        }
-
-        // Auto-mark with black if amount is the absolute maximum
-        if (val !== undefined && val !== null && val === maxVal && maxVal > 0) {
-          cell.classList.add("max-black");
-        } else {
-          cell.classList.remove("max-black");
         }
       }
     }
