@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
@@ -265,6 +265,23 @@
     .grid-cell.exceeded-red .grid-cell-num {
       color: var(--error);
       font-weight: 800;
+    }
+
+    /* Maximum amount cell in solid dark black with gold text */
+    .grid-cell.max-black {
+      background: #111827 !important;
+      border: 2px solid #000000 !important;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    .grid-cell.max-black .grid-cell-num {
+      color: #ffffff !important;
+      font-weight: 800 !important;
+    }
+
+    .grid-cell.max-black .grid-cell-val {
+      color: #fbbf24 !important;
+      font-weight: 800 !important;
     }
 
     /* Cutting hit active cell in glowing green */
@@ -1081,6 +1098,9 @@
       const calculatedTotal = Object.values(currentTable).reduce((a, b) => a + b, 0);
       const threshold = calculatedTotal / 100;
 
+      // Find the absolute maximum value present in the table
+      const maxVal = Object.keys(currentTable).length > 0 ? Math.max(...Object.values(currentTable)) : 0;
+
       for (let i = 0; i <= 99; i++) {
         const numStr = formatNumber(i);
         const valSpan = document.getElementById(`cell-val-${numStr}`);
@@ -1094,6 +1114,13 @@
           cell.classList.add("exceeded-red");
         } else {
           cell.classList.remove("exceeded-red");
+        }
+
+        // Auto-mark with black if amount is the absolute maximum
+        if (val !== undefined && val !== null && val === maxVal && maxVal > 0) {
+          cell.classList.add("max-black");
+        } else {
+          cell.classList.remove("max-black");
         }
       }
     }
