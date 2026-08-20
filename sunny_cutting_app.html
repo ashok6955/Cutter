@@ -269,19 +269,19 @@
 
     /* Maximum amount cell in solid dark black with gold text */
     .grid-cell.max-black {
-      background: #111827 !important;
-      border: 2px solid #000000 !important;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4) !important;
+      background: #000000 !important;
+      border: 2px solid #ffffff !important;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.6) !important;
     }
 
     .grid-cell.max-black .grid-cell-num {
       color: #ffffff !important;
-      font-weight: 800 !important;
+      font-weight: 900 !important;
     }
 
     .grid-cell.max-black .grid-cell-val {
       color: #fbbf24 !important;
-      font-weight: 800 !important;
+      font-weight: 900 !important;
     }
 
     /* Cutting hit active cell in glowing green */
@@ -926,6 +926,13 @@
         }
         updateVerificationDisplays(result);
         runAnalysis();
+
+        // Calculate and display heavy numbers popup info
+        const calculatedTotal = Object.values(currentTable).reduce((a, b) => a + b, 0);
+        const threshold = calculatedTotal / 100;
+        const blackLimit = threshold + (calculatedTotal <= 100000 ? 300 : (calculatedTotal / 100) * 3);
+        const heavyCount = Object.entries(currentTable).filter(([k, v]) => Number(v) > Number(blackLimit)).length;
+        alert(`Loaded bet sheet successfully!\n\nHeavy numbers found: ${heavyCount}`);
       });
 
       document.getElementById("btn-clear-table").addEventListener("click", () => {
@@ -1084,7 +1091,8 @@
     function updateGridCuttingUI() {
       const calculatedTotal = Object.values(currentTable).reduce((a, b) => a + b, 0);
       const threshold = calculatedTotal / 100;
-      const blackLimit = threshold + (calculatedTotal <= 30000 ? 300 : (calculatedTotal / 100) * 3);
+      const blackLimit = threshold + (calculatedTotal <= 100000 ? 300 : (calculatedTotal / 100) * 3);
+      console.log(`Cutter Debug: Total=${calculatedTotal}, Threshold=${threshold}, BlackLimit=${blackLimit}`);
 
       for (let i = 0; i <= 99; i++) {
         const numStr = formatNumber(i);
@@ -1099,8 +1107,13 @@
 
         if (cuttingActiveNumbers.has(numStr)) {
           cell.classList.add("cutting-active");
-        } else if (val !== undefined && val !== null && val > blackLimit && blackLimit > 0) {
-          cell.classList.add("max-black");
+        } else if (val !== undefined && val !== null) {
+          const numVal = Number(val);
+          const numLimit = Number(blackLimit);
+          if (numVal > numLimit && numLimit > 0) {
+            console.log(`Cutter Debug Heavy Cell: Number=${numStr}, Val=${val}, BlackLimit=${blackLimit}`);
+            cell.classList.add("max-black");
+          }
         }
       }
     }
