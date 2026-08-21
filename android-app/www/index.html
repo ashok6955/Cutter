@@ -1394,7 +1394,7 @@
         if (baseKey.length === 2) {
           const X = Number(baseKey[0]);
           const Y = Number(baseKey[1]);
-          for (let unit = 1; unit <= 9; unit++) {
+          for (let unit = 0; unit <= 9; unit++) {
             add(X * 10 + unit);
             add(Y * 10 + unit);
           }
@@ -1518,8 +1518,9 @@
           if (numVal > numLimit && numLimit > 0) {
             // Include only if not in the cutting active set
             if (!cuttingActiveNumbers.has(numStr)) {
-              heavyLines.push({ number: numStr, val: numVal });
-              heavyTotal += numVal;
+              const displayVal = Math.round(numVal - addedAmount);
+              heavyLines.push({ number: numStr, val: displayVal });
+              heavyTotal += displayVal;
             }
           }
         }
