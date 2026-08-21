@@ -940,7 +940,8 @@
         // Calculate and display heavy numbers popup info
         const calculatedTotal = Object.values(currentTable).reduce((a, b) => a + b, 0);
         const threshold = calculatedTotal / 100;
-        const blackLimit = threshold + (calculatedTotal <= 100000 ? 300 : (calculatedTotal / 100) * 3);
+        const addedAmount = Math.max(300, threshold * 0.3);
+        const blackLimit = threshold + addedAmount;
         const heavyCount = Object.entries(currentTable).filter(([k, v]) => Number(v) > Number(blackLimit)).length;
         alert(`Loaded bet sheet successfully!\n\nHeavy numbers found: ${heavyCount}`);
       });
@@ -1102,7 +1103,8 @@
     function updateGridCuttingUI() {
       const calculatedTotal = Object.values(currentTable).reduce((a, b) => a + b, 0);
       const threshold = calculatedTotal / 100;
-      const blackLimit = threshold + (calculatedTotal <= 100000 ? 300 : (calculatedTotal / 100) * 3);
+      const addedAmount = Math.max(300, threshold * 0.3);
+      const blackLimit = threshold + addedAmount;
       console.log(`Cutter Debug: Total=${calculatedTotal}, Threshold=${threshold}, BlackLimit=${blackLimit}`);
 
       for (let i = 0; i <= 99; i++) {
@@ -1411,7 +1413,8 @@
 
       const calculatedTotal = Object.values(currentTable).reduce((a, b) => a + b, 0);
       const threshold = calculatedTotal / 100;
-      const blackLimit = threshold + (calculatedTotal <= 100000 ? 300 : (calculatedTotal / 100) * 3);
+      const addedAmount = Math.max(300, threshold * 0.3);
+      const blackLimit = threshold + addedAmount;
 
       // Gather base inputs
       const manualBasesText = manualBasesInput ? manualBasesInput.value : "";
