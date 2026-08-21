@@ -830,6 +830,15 @@
       </div>
     </div>
 
+    <!-- Uncut Heavy Numbers Section -->
+    <div style="margin-bottom: 16px;">
+      <div style="font-size: 11px; font-weight: 700; color: #fbbf24; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">Uncut Heavy Numbers (मोटे अन-कट)</div>
+      <div style="background-color: #1a1715; border: 1px solid rgba(251, 191, 36, 0.2); border-radius: var(--radius-md); padding: 12px; height: 120px; overflow-y: auto;">
+        <pre id="result-output-heavy" style="font-family: var(--font-mono); font-size: 13px; color: #fef3c7; white-space: pre-wrap; margin: 0;">—</pre>
+      </div>
+      <button id="btn-copy-heavy" class="btn" style="width: 100%; margin-top: 8px; font-size: 11px; padding: 10px; background-color: rgba(251, 191, 36, 0.1); border-color: rgba(251, 191, 36, 0.2); color: #fbbf24;">📋 Copy Uncut Heavy</button>
+    </div>
+
     <button id="btn-copy-result" class="btn primary" style="width: 100%; padding: 14px; gap: 8px; font-size: 16px;">
       📋 Copy Combined Results
     </button>
@@ -845,7 +854,7 @@
 
     // DOM Elements
     let tableStatusBadge, tableRawInput, tableProvidedTotal, statCalcTotal, statThreshold, statCuts, statTotal;
-    let gridContainer, resultOutputLeft, resultOutputRight, consoleLogMsg, manualBasesInput, selectedNumbersDisplay;
+    let gridContainer, resultOutputLeft, resultOutputRight, resultOutputHeavy, consoleLogMsg, manualBasesInput, selectedNumbersDisplay;
     let fileInput, ocrLoader, ocrProgress, drawerBackdrop;
 
     function init() {
@@ -858,6 +867,7 @@
       gridContainer = document.getElementById("grid-container");
       resultOutputLeft = document.getElementById("result-output-left");
       resultOutputRight = document.getElementById("result-output-right");
+      resultOutputHeavy = document.getElementById("result-output-heavy");
       consoleLogMsg = document.getElementById("parse-message");
       manualBasesInput = document.getElementById("manual-bases");
       selectedNumbersDisplay = document.getElementById("selected-numbers-display");
@@ -969,6 +979,7 @@
       document.getElementById("btn-copy-result").addEventListener("click", copyCombinedResult);
       document.getElementById("btn-copy-left").addEventListener("click", () => copyText("result-output-left", "btn-copy-left"));
       document.getElementById("btn-copy-right").addEventListener("click", () => copyText("result-output-right", "btn-copy-right"));
+      document.getElementById("btn-copy-heavy").addEventListener("click", () => copyText("result-output-heavy", "btn-copy-heavy"));
 
       if (fileInput) {
         fileInput.addEventListener("change", (e) => {
@@ -1396,10 +1407,11 @@
 
     // Analysis trigger
     function runAnalysis() {
-      if (!resultOutputLeft || !resultOutputRight) return;
+      if (!resultOutputLeft || !resultOutputRight || !resultOutputHeavy) return;
 
       const calculatedTotal = Object.values(currentTable).reduce((a, b) => a + b, 0);
       const threshold = calculatedTotal / 100;
+      const blackLimit = threshold + (calculatedTotal <= 100000 ? 300 : (calculatedTotal / 100) * 3);
 
       // Gather base inputs
       const manualBasesText = manualBasesInput ? manualBasesInput.value : "";
@@ -1413,6 +1425,7 @@
       if (baseNumbers.length === 0) {
         resultOutputLeft.textContent = "—";
         resultOutputRight.textContent = "—";
+        resultOutputHeavy.textContent = "—";
         cuttingActiveNumbers.clear();
         updateGridCuttingUI();
         statCuts.textContent = "0";
@@ -1489,6 +1502,36 @@
       } else {
         resultOutputRight.textContent = "—";
       }
+
+      // Format Heavy Un-cut Box
+      const heavyLines = [];
+      let heavyTotal = 0;
+      for (let i = 0; i <= 99; i++) {
+        const numStr = formatNumber(i);
+        const val = currentTable[numStr];
+        if (val !== undefined && val !== null) {
+          const numVal = Number(val);
+          const numLimit = Number(blackLimit);
+          if (numVal > numLimit && numLimit > 0) {
+            // Include only if not in the cutting active set
+            if (!cuttingActiveNumbers.has(numStr)) {
+              heavyLines.push({ number: numStr, val: numVal });
+              heavyTotal += numVal;
+            }
+          }
+        }
+      }
+
+      // Sort uncut heavy numbers descending
+      heavyLines.sort((a, b) => b.val - a.val || Number(a.number) - Number(b.number));
+
+      const heavyOutputLines = heavyLines.map(item => `${item.number} = ${item.val}`);
+      if (heavyOutputLines.length > 0) {
+        heavyOutputLines.push("", `GRAND TOTAL = ${heavyTotal}`);
+        resultOutputHeavy.textContent = heavyOutputLines.join("\n");
+      } else {
+        resultOutputHeavy.textContent = "—";
+      }
     }
 
     function copyText(elementId, buttonId) {
@@ -1513,11 +1556,13 @@
     function copyCombinedResult() {
       const leftText = resultOutputLeft.textContent;
       const rightText = resultOutputRight.textContent;
+      const heavyText = resultOutputHeavy.textContent;
       
       const leftPart = (leftText.trim() === "—" || leftText.trim() === "") ? "" : `=== MOTA NUMBERS (400+) ===\n${leftText}`;
       const rightPart = (rightText.trim() === "—" || rightText.trim() === "") ? "" : `=== BACHE NUMBERS (<400) ===\n${rightText}`;
+      const heavyPart = (heavyText.trim() === "—" || heavyText.trim() === "") ? "" : `=== UNCUT HEAVY NUMBERS (मोटे अन-कट) ===\n${heavyText}`;
       
-      const combined = [leftPart, rightPart].filter(Boolean).join("\n\n");
+      const combined = [leftPart, rightPart, heavyPart].filter(Boolean).join("\n\n");
       if (!combined) return;
 
       navigator.clipboard.writeText(combined).then(() => {
